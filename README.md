@@ -31,7 +31,7 @@ To obtain the data:
 
 Run scripts in order inside Google Colab. Each script saves its output to Google Drive so sessions can be resumed without rerunning expensive steps.
 
-**Step 1 — Parse DrugBank XML**
+**Step 1: Parse DrugBank XML**
 
 Extracts drug IDs, names, and all interaction records into a CSV file. Uses lxml iterparse for memory-efficient processing of the ~1.77 GB XML file.
 
@@ -41,7 +41,7 @@ python 01_parse_drugbank.py
 
 Output: `interactions.csv`
 
-**Step 2 — Extract SMILES**
+**Step 2: Extract SMILES**
 
 Second pass over the XML to extract molecular structure strings. Merges SMILES onto the interaction table and removes rows where either drug lacks a valid SMILES string.
 
@@ -51,7 +51,7 @@ python 02_extract_smiles.py
 
 Output: `interactions_with_smiles.csv`
 
-**Step 3 — Build dataset**
+**Step 3: Build dataset**
 
 Deduplicates directed pairs, generates negative samples at a 1:1 ratio, and applies a stratified 80/10/10 train/validation/test split.
 
@@ -61,7 +61,7 @@ python 03_build_dataset.py
 
 Output: `train.csv`, `val.csv`, `test.csv`
 
-**Step 4 — Train GCN**
+**Step 4: Train GCN**
 
 Converts SMILES strings to molecular graphs using RDKit and PyTorch Geometric. Trains the GCN with early stopping on validation loss. Saves best model weights.
 
@@ -71,7 +71,7 @@ python 04_gcn_model.py
 
 Output: `gcn_best_model.pt`, `training_curves.png`
 
-**Step 5 — Build and run RAG pipeline**
+**Step 5: Build and run RAG pipeline**
 
 Encodes DrugBank drug documents using BioBERT and builds a FAISS flat L2 index. Saves embeddings and index to Drive. Runs inference on the test set.
 
@@ -81,7 +81,7 @@ python 05_rag_pipeline.py
 
 Output: `drug_embeddings.npy`, `faiss_index.bin`, `rag_predictions.csv`
 
-**Step 6 — Evaluate**
+**Step 6: Evaluate**
 
 Evaluates both models on the test set. Produces comparison table, confusion matrices, ROC curves, Precision-Recall curves, and bar chart.
 
